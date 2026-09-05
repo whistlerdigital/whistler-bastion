@@ -1,6 +1,6 @@
 {
   "name": "@whistlerdigital/bastion",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Free local safety checkpoint for risky developer and AI coding agent operations",
   "type": "module",
   "types": "./src/index.d.ts",

@@ -3,7 +3,7 @@ import { appendAudit, createPolicy, loadConfig } from "../src/index.js";
 const args = process.argv.slice(2);
 const valueAfter = (flag) => { const index = args.indexOf(flag); return index >= 0 ? args[index + 1] : undefined; };
 if (args.includes("--help")) { process.stdout.write("Bastion — cross-platform local policy guard\n\nUsage:\n  bastion [--json] [--context production] [--platform win32] [--config .bastion.json] [--audit .bastion/audit.jsonl] -- <command>\n  echo '{\"command\":\"git status\"}' | bastion --stdin --json\n\nExit codes: 0 ALLOW, 2 WARN, 3 CONFIRM, 4 BLOCK\n"); process.exit(0); }
-if (args.includes("--version")) { process.stdout.write("0.2.0\n"); process.exit(0); }
+if (args.includes("--version")) { process.stdout.write("0.2.2\n"); process.exit(0); }
 const stdinMode = args.includes("--stdin");
 const separator = args.indexOf("--");
 let input;
