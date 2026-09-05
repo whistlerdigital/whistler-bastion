@@ -1,6 +1,6 @@
 {
   "name": "bastion",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "displayName": "Bastion — AI Agent Safety Guard",
   "description": "Evaluate risky shell, Git, database and AI agent operations locally before execution.",
   "publisher": "whistlerdigital",
@@ -12,6 +12,10 @@
   },
   "categories": ["Other", "Linters", "Machine Learning"],
   "keywords": ["AI agent", "security", "guardrail", "MCP", "policy"],
+  "galleryBanner": {
+    "color": "#0B1220",
+    "theme": "dark"
+  },
   "extensionKind": ["workspace"],
   "activationEvents": [
     "onCommand:bastion.evaluateOperation",
