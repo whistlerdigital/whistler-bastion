@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Verify release versions
+        run: |
+          node -e "const root=require('./package.json');const ext=require('./vscode-extension/package.json');if(root.version!==ext.version)throw new Error('Root and extension versions differ')"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "v$(node -p "require('./package.json').version")" != "${GITHUB_REF_NAME}" ]; then exit 1; fi
+      - name: Publish npm package
+        if: env.NPM_TOKEN != ''
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build editor extension
+        working-directory: vscode-extension
+        run: npm ci && npm run package
+      - name: Publish Open VSX
+        if: env.OVSX_PAT != ''
+        working-directory: vscode-extension
+        run: npx ovsx publish *.vsix -p "$OVSX_PAT"
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+      - name: Publish Visual Studio Marketplace
+        if: env.VSCE_PAT != ''
+        working-directory: vscode-extension
+        run: npx vsce publish -p "$VSCE_PAT"
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
