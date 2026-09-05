@@ -3,7 +3,7 @@ import { appendAudit, connectAll, connectClient, createPolicy, detectClientsDeta
 const args = process.argv.slice(2);
 const valueAfter = (flag) => { const index = args.indexOf(flag); return index >= 0 ? args[index + 1] : undefined; };
 if (args.includes("--help")) { process.stdout.write("Bastion — cross-platform local policy guard\n\nSetup:\n  bastion detect [--global]\n  bastion setup [--global]\n  bastion init\n  bastion connect <client|--all> [--global]\n  bastion doctor [--fix] [--global] [--json]\n  bastion disconnect <client> [--global]\n  bastion restore <client> [--global]\n\nEvaluate:\n  bastion [--json] [--context production] [--platform win32] [--config .bastion.json] [--audit .bastion/audit.jsonl] -- <command>\n\nClients: codex, claude, cursor, vscode, copilot, cline, roo, gemini, windsurf, opencode, continue\nExit codes: 0 ALLOW, 2 WARN, 3 CONFIRM, 4 BLOCK\n"); process.exit(0); }
-if (args.includes("--version")) { process.stdout.write("0.4.1\n"); process.exit(0); }
+if (args.includes("--version")) { process.stdout.write("0.4.3\n"); process.exit(0); }
 const base = resolveBase({ global: args.includes("--global") });
 if (args[0] === "init") { const result = await initializeProject(base); process.stdout.write(`Bastion initialized: ${result.configFile}\n`); process.exit(0); }
 if (args[0] === "detect") { const result = await detectClientsDetailed(base); const found = result.filter((item) => item.detected); process.stdout.write(`${args.includes("--json") ? JSON.stringify(result, null, 2) : found.map((item) => `${item.client}: ${item.commandFound ? "command" : "config"}`).join("\n") || "No supported client detected."}\n`); process.exit(0); }

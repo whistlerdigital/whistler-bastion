@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3 - 2026-09-05
+
+- Added the installable VS Code-compatible extension for VS Marketplace and Open VSX.
+- Expanded marketplace documentation, product identity and official distribution links.
+- Synchronized CLI, MCP server and package version metadata.
+
 ## 0.4.2 - 2026-09-05
 
 - Added the official Bastion product icon with high-contrast white symbols.
