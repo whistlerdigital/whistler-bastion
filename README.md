@@ -55,6 +55,26 @@ Example result:
 
 Connect the SDK, JSON bridge or MCP server to the host that executes operations, then enforce the returned decision before execution.
 
+## One-command setup
+
+Initialize safe project defaults:
+
+```bash
+npx @whistlerdigital/bastion init
+```
+
+Connect one supported client or generate configurations for all of them:
+
+```bash
+npx @whistlerdigital/bastion connect cursor
+npx @whistlerdigital/bastion connect --all
+npx @whistlerdigital/bastion doctor
+```
+
+Supported adapters: Codex, Claude, Cursor, VS Code, GitHub Copilot, Cline, Roo Code, Gemini CLI, Windsurf, OpenCode and Continue. Existing JSON configuration is merged, not replaced. When an existing file changes, Bastion writes a timestamped backup first.
+
+`connect --all` prepares project-local configuration files; it does not install or activate third-party applications. Restart the relevant client after connecting it.
+
 ## Integration surfaces
 
 - Cross-platform CLI for Windows, macOS and Linux

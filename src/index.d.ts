@@ -8,3 +8,8 @@ export const DECISIONS: Readonly<Record<Decision, number>>;
 export const builtinRules: readonly PolicyRule[];
 export function loadConfig(filename?: string, cwd?: string): Promise<Record<string, unknown>>;
 export function appendAudit(result: Evaluation, filename?: string): Promise<void>;
+export const CLIENTS: Readonly<Record<string, { file: string; format: string }>>;
+export function initializeProject(cwd?: string): Promise<{ configFile: string; createdConfig: boolean; ignoreUpdated: boolean }>;
+export function connectClient(client: string, cwd?: string): Promise<{ client: string; file: string; backupFile: string | null }>;
+export function connectAll(cwd?: string): Promise<Array<{ client: string; file: string; backupFile: string | null }>>;
+export function diagnose(cwd?: string): Promise<{ ok: boolean; checks: Array<{ name: string; ok: boolean; detail: string }> }>;
