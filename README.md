@@ -19,11 +19,11 @@ These open protocols let Bastion integrate with products that support MCP, subpr
 ## CLI
 
 ```bash
-npx github:whistlerdigital/whistler-bastion --json -- "git push --force origin main"
+npx @whistlerdigital/bastion --json -- "git push --force origin main"
 ```
 
 ```powershell
-npx github:whistlerdigital/whistler-bastion --platform win32 -- "Remove-Item -Recurse -Force C:\\"
+npx @whistlerdigital/bastion --platform win32 -- "Remove-Item -Recurse -Force C:\\"
 ```
 
 For language-neutral input:
@@ -37,8 +37,8 @@ Exit codes: `0` ALLOW, `2` WARN, `3` CONFIRM, `4` BLOCK.
 ## Whistler JavaScript SDK
 
 ```js
-// npm install github:whistlerdigital/whistler-bastion
-import { createPolicy } from "@whistler-digital/bastion";
+// npm install @whistlerdigital/bastion
+import { createPolicy } from "@whistlerdigital/bastion";
 
 const bastion = createPolicy({ ignoreRules: [] });
 const result = bastion.evaluate({
@@ -61,7 +61,7 @@ Add the following stdio server to an MCP-compatible host:
   "mcpServers": {
     "whistler-bastion": {
       "command": "npx",
-      "args": ["-y", "--package", "github:whistlerdigital/whistler-bastion", "bastion-mcp"]
+      "args": ["-y", "--package", "@whistlerdigital/bastion", "bastion-mcp"]
     }
   }
 }
@@ -69,7 +69,7 @@ Add the following stdio server to an MCP-compatible host:
 
 The server publishes one tool, `bastion_evaluate`. The calling agent should invoke it before a filesystem, shell, Git, database, permission or production mutation and enforce the returned decision.
 
-The package currently installs directly from the public GitHub repository. The reserved npm package metadata is included, but npm registry publication is not claimed until the Whistler Digital npm account completes authentication and release approval.
+The package is published publicly from the verified `whistlerdigital` npm account. GitHub installation remains available as a source-based alternative.
 
 ## Configuration and audit
 

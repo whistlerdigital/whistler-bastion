@@ -1,10 +1,10 @@
 {
-  "name": "@whistler-digital/bastion",
+  "name": "@whistlerdigital/bastion",
   "version": "0.2.0",
   "description": "Local policy guard for risky AI coding agent operations",
   "type": "module",
   "types": "./src/index.d.ts",
-  "bin": { "bastion": "./bin/bastion.js", "bastion-mcp": "./bin/bastion-mcp.js" },
+  "bin": { "bastion": "bin/bastion.js", "bastion-mcp": "bin/bastion-mcp.js" },
   "exports": { ".": "./src/index.js", "./rules": "./src/rules.js" },
   "scripts": {
     "test": "node --test",
