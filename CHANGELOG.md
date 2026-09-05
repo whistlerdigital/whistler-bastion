@@ -2,6 +2,13 @@
 
 All notable changes to Bastion are documented here.
 
+## 0.4.1 — 2026-09-05
+
+- Detects executable clients and existing configuration independently.
+- Reports whether discovery came from a command or configuration path.
+- Writes changed integration files atomically.
+- Adds a real CLI subprocess lifecycle acceptance test.
+
 ## 0.4.0 — 2026-09-05
 
 ### Added

@@ -1,25 +1,32 @@
-import { access, copyFile, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { access, copyFile, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import path from "node:path";
 import { homedir } from "node:os";
+import { spawnSync } from "node:child_process";
 
 export const CLIENTS = Object.freeze({
-  codex: { file: ".codex/config.toml", format: "toml" },
-  claude: { file: ".mcp.json", format: "json" },
-  cursor: { file: ".cursor/mcp.json", format: "json" },
-  vscode: { file: ".vscode/mcp.json", format: "vscode" },
-  copilot: { file: ".vscode/mcp.json", format: "vscode" },
-  cline: { file: ".cline/mcp.json", format: "json" },
-  roo: { file: ".roo/mcp.json", format: "json" },
-  gemini: { file: ".gemini/settings.json", format: "json" },
-  windsurf: { file: ".windsurf/mcp_config.json", format: "json" },
-  opencode: { file: "opencode.json", format: "opencode" },
-  continue: { file: ".continue/mcpServers/whistler-bastion.yaml", format: "yaml" },
+  codex: { file: ".codex/config.toml", format: "toml", commands: ["codex"] },
+  claude: { file: ".mcp.json", format: "json", commands: ["claude"] },
+  cursor: { file: ".cursor/mcp.json", format: "json", commands: ["cursor"] },
+  vscode: { file: ".vscode/mcp.json", format: "vscode", commands: ["code"] },
+  copilot: { file: ".vscode/mcp.json", format: "vscode", commands: ["code"] },
+  cline: { file: ".cline/mcp.json", format: "json", commands: [] },
+  roo: { file: ".roo/mcp.json", format: "json", commands: [] },
+  gemini: { file: ".gemini/settings.json", format: "json", commands: ["gemini"] },
+  windsurf: { file: ".windsurf/mcp_config.json", format: "json", commands: ["windsurf"] },
+  opencode: { file: "opencode.json", format: "opencode", commands: ["opencode"] },
+  continue: { file: ".continue/mcpServers/whistler-bastion.yaml", format: "yaml", commands: ["continue"] },
 });
 
 const server = { command: "npx", args: ["-y", "--package", "@whistlerdigital/bastion", "bastion-mcp"] };
 const exists = async (file) => access(file, constants.F_OK).then(() => true, () => false);
 export const resolveBase = (options = {}) => options.global ? homedir() : (options.cwd ?? process.cwd());
+const commandExists = (command) => spawnSync(process.platform === "win32" ? "where" : "which", [command], { stdio: "ignore", shell: false }).status === 0;
+async function atomicWrite(file, content) {
+  const temporary = `${file}.bastion-write-${process.pid}`;
+  await writeFile(temporary, content, { flag: "wx" });
+  await rename(temporary, file);
+}
 
 async function backup(file) {
   if (!(await exists(file))) return null;
@@ -52,10 +59,10 @@ export async function connectClient(client, cwd = process.cwd()) {
     const current = (await exists(file)) ? await readFile(file, "utf8") : "";
     if (!current.includes("[mcp_servers.whistler-bastion]")) {
       const block = '\n[mcp_servers.whistler-bastion]\ncommand = "npx"\nargs = ["-y", "--package", "@whistlerdigital/bastion", "bastion-mcp"]\n';
-      await writeFile(file, `${current.trimEnd()}${block}`);
+      await atomicWrite(file, `${current.trimEnd()}${block}`);
     }
   } else if (definition.format === "yaml") {
-    await writeFile(file, 'name: whistler-bastion\ncommand: npx\nargs:\n  - -y\n  - --package\n  - "@whistlerdigital/bastion"\n  - bastion-mcp\n');
+    await atomicWrite(file, 'name: whistler-bastion\ncommand: npx\nargs:\n  - -y\n  - --package\n  - "@whistlerdigital/bastion"\n  - bastion-mcp\n');
   } else {
     let current = {};
     if (await exists(file)) {
@@ -67,19 +74,25 @@ export async function connectClient(client, cwd = process.cwd()) {
       ? { type: "local", command: ["npx", "-y", "--package", "@whistlerdigital/bastion", "bastion-mcp"], enabled: true }
       : server;
     current[key] = { ...(current[key] ?? {}), "whistler-bastion": clientServer };
-    await writeFile(file, `${JSON.stringify(current, null, 2)}\n`);
+    await atomicWrite(file, `${JSON.stringify(current, null, 2)}\n`);
   }
   return { client, file, backupFile };
 }
 
 export async function detectClients(cwd = process.cwd()) {
-  const detected = [];
+  return (await detectClientsDetailed(cwd)).filter((item) => item.detected).map((item) => item.client);
+}
+
+export async function detectClientsDetailed(cwd = process.cwd()) {
+  const results = [];
   for (const [client, definition] of Object.entries(CLIENTS)) {
     const file = path.join(cwd, definition.file);
     const parent = path.dirname(file);
-    if (await exists(file) || (parent !== cwd && await exists(parent))) detected.push(client);
+    const configFound = await exists(file) || (parent !== cwd && await exists(parent));
+    const commandFound = definition.commands.some(commandExists);
+    results.push({ client, detected: configFound || commandFound, configFound, commandFound, file });
   }
-  return [...new Set(detected)];
+  return results;
 }
 
 export async function setupDetected(options = {}) {
@@ -99,14 +112,14 @@ export async function disconnectClient(client, cwd = process.cwd()) {
   const backupFile = await backup(file);
   if (definition.format === "toml") {
     const current = await readFile(file, "utf8");
-    await writeFile(file, current.replace(/\n?\[mcp_servers\.whistler-bastion\]\ncommand = "npx"\nargs = \[[^\n]+\]\n?/g, "\n"));
+    await atomicWrite(file, current.replace(/\n?\[mcp_servers\.whistler-bastion\]\ncommand = "npx"\nargs = \[[^\n]+\]\n?/g, "\n"));
   } else if (definition.format === "yaml") {
-    await writeFile(file, "");
+    await atomicWrite(file, "");
   } else {
     const current = JSON.parse(await readFile(file, "utf8"));
     const key = definition.format === "vscode" ? "servers" : definition.format === "opencode" ? "mcp" : "mcpServers";
     if (current[key]) delete current[key]["whistler-bastion"];
-    await writeFile(file, `${JSON.stringify(current, null, 2)}\n`);
+    await atomicWrite(file, `${JSON.stringify(current, null, 2)}\n`);
   }
   return { client, file, changed: true, backupFile };
 }
