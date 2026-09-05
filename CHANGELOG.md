@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.2 - 2026-09-05
+
+- Added the official Bastion product icon with high-contrast white symbols.
+- Added consistent Bastion and Whistler Digital attribution to GitHub and npm presentation.
+- Included the product icon in the published npm package.
+
 All notable changes to Bastion are documented here.
 
 ## 0.4.1 — 2026-09-05

@@ -1,6 +1,12 @@
-# Bastion
+<p align="center">
+  <a href="https://whistler.com.tr/open-source/bastion">
+    <img src="https://raw.githubusercontent.com/whistlerdigital/whistler-bastion/main/assets/bastion-icon-v3.png" width="160" height="160" alt="Bastion product logo">
+  </a>
+</p>
 
-Cross-platform, local-first policy guard for developer tools and AI coding agents.
+<h1 align="center">Bastion</h1>
+
+<p align="center"><strong>Local policy guard for developer tools and AI coding agents.</strong></p>
 
 **Designed, developed and maintained by [Whistler Digital](https://whistler.com.tr/open-source/bastion).**
 

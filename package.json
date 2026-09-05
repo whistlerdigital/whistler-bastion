@@ -1,22 +1,52 @@
 {
   "name": "@whistlerdigital/bastion",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Free local safety checkpoint for risky developer and AI coding agent operations",
   "type": "module",
   "types": "./src/index.d.ts",
-  "bin": { "bastion": "bin/bastion.js", "bastion-mcp": "bin/bastion-mcp.js" },
-  "exports": { ".": "./src/index.js", "./rules": "./src/rules.js" },
+  "bin": {
+    "bastion": "bin/bastion.js",
+    "bastion-mcp": "bin/bastion-mcp.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./rules": "./src/rules.js"
+  },
   "scripts": {
     "test": "node --test",
     "check": "node --check bin/bastion.js && node --check bin/bastion-mcp.js && node --check src/policy.js && node --test"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "author": "Whistler Digital <info@whistler.com.tr>",
-  "maintainers": ["Whistler Digital <info@whistler.com.tr>"],
+  "maintainers": [
+    "Whistler Digital <info@whistler.com.tr>"
+  ],
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/whistlerdigital/whistler-bastion.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whistlerdigital/whistler-bastion.git"
+  },
   "homepage": "https://whistler.com.tr/open-source/bastion",
-  "bugs": { "url": "https://github.com/whistlerdigital/whistler-bastion/issues" },
-  "keywords": ["security", "policy", "cli", "agent", "guardrail", "local-first"],
-  "files": ["bin", "src", "README.md", "CHANGELOG.md", "LICENSE", "SECURITY.md"]
+  "bugs": {
+    "url": "https://github.com/whistlerdigital/whistler-bastion/issues"
+  },
+  "keywords": [
+    "security",
+    "policy",
+    "cli",
+    "agent",
+    "guardrail",
+    "local-first"
+  ],
+  "files": [
+    "bin",
+    "src",
+    "assets/bastion-icon-v3.png",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "SECURITY.md"
+  ]
 }
