@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { connectClient, diagnose, initializeProject } from "../src/integrations.js";
+import { connectClient, detectClients, diagnose, disconnectClient, initializeProject, restoreLatest } from "../src/integrations.js";
 
 test("init creates safe project defaults without duplicating gitignore", async () => {
   const cwd = await mkdtemp(path.join(tmpdir(), "bastion-init-"));
@@ -48,5 +48,18 @@ test("VS Code and OpenCode receive their native MCP schemas", async () => {
     const opencode = JSON.parse(await readFile(path.join(cwd, "opencode.json"), "utf8"));
     assert.equal(vscode.servers["whistler-bastion"].command, "npx");
     assert.deepEqual(opencode.mcp["whistler-bastion"].command.slice(0, 2), ["npx", "-y"]);
+  } finally { await rm(cwd, { recursive: true, force: true }); }
+});
+
+test("detect, disconnect and restore preserve a reversible client configuration", async () => {
+  const cwd = await mkdtemp(path.join(tmpdir(), "bastion-lifecycle-"));
+  try {
+    await connectClient("cursor", cwd);
+    assert.ok((await detectClients(cwd)).includes("cursor"));
+    const disconnected = await disconnectClient("cursor", cwd);
+    assert.equal(disconnected.changed, true);
+    assert.equal((await readFile(path.join(cwd, ".cursor/mcp.json"), "utf8")).includes("whistler-bastion"), false);
+    await restoreLatest("cursor", cwd);
+    assert.equal((await readFile(path.join(cwd, ".cursor/mcp.json"), "utf8")).includes("whistler-bastion"), true);
   } finally { await rm(cwd, { recursive: true, force: true }); }
 });

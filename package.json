@@ -1,6 +1,6 @@
 {
   "name": "@whistlerdigital/bastion",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Free local safety checkpoint for risky developer and AI coding agent operations",
   "type": "module",
   "types": "./src/index.d.ts",
@@ -18,5 +18,5 @@
   "homepage": "https://whistler.com.tr/open-source/bastion",
   "bugs": { "url": "https://github.com/whistlerdigital/whistler-bastion/issues" },
   "keywords": ["security", "policy", "cli", "agent", "guardrail", "local-first"],
-  "files": ["bin", "src", "README.md", "LICENSE", "SECURITY.md"]
+  "files": ["bin", "src", "README.md", "CHANGELOG.md", "LICENSE", "SECURITY.md"]
 }

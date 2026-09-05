@@ -2,6 +2,17 @@
 
 All notable changes to Bastion are documented here.
 
+## 0.4.0 — 2026-09-05
+
+### Added
+
+- `detect` and `setup` for configured-client discovery and guided project setup.
+- `--global` support for user-level configuration locations.
+- `doctor --fix` for safe configuration repair.
+- `disconnect` and `restore` with timestamped recovery copies.
+- Windows, macOS and Linux CI across Node.js 20 and 22.
+- Reversible integration lifecycle tests.
+
 ## 0.3.0 — 2026-09-05
 
 ### Added

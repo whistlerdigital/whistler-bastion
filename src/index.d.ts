@@ -13,3 +13,8 @@ export function initializeProject(cwd?: string): Promise<{ configFile: string; c
 export function connectClient(client: string, cwd?: string): Promise<{ client: string; file: string; backupFile: string | null }>;
 export function connectAll(cwd?: string): Promise<Array<{ client: string; file: string; backupFile: string | null }>>;
 export function diagnose(cwd?: string): Promise<{ ok: boolean; checks: Array<{ name: string; ok: boolean; detail: string }> }>;
+export function detectClients(cwd?: string): Promise<string[]>;
+export function setupDetected(options?: { cwd?: string; global?: boolean; clients?: string[] }): Promise<Record<string, unknown>>;
+export function disconnectClient(client: string, cwd?: string): Promise<Record<string, unknown>>;
+export function restoreLatest(client: string, cwd?: string): Promise<Record<string, unknown>>;
+export function repair(options?: { cwd?: string; global?: boolean; clients?: string[] }): Promise<Record<string, unknown>>;

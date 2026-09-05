@@ -75,6 +75,18 @@ Supported adapters: Codex, Claude, Cursor, VS Code, GitHub Copilot, Cline, Roo C
 
 `connect --all` prepares project-local configuration files; it does not install or activate third-party applications. Restart the relevant client after connecting it.
 
+Detect installed/project-configured clients, repair configuration, or safely undo a connection:
+
+```bash
+npx @whistlerdigital/bastion detect
+npx @whistlerdigital/bastion setup
+npx @whistlerdigital/bastion doctor --fix
+npx @whistlerdigital/bastion disconnect cursor
+npx @whistlerdigital/bastion restore cursor
+```
+
+Add `--global` to `detect`, `setup`, `connect`, `doctor`, `disconnect` or `restore` to operate in the current user's home configuration area. Project-local mode remains the default. Disconnect and repair operations create a timestamped recovery copy before changing existing configuration.
+
 ## Integration surfaces
 
 - Cross-platform CLI for Windows, macOS and Linux
