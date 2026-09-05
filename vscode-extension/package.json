@@ -1,0 +1,42 @@
+{
+  "name": "bastion",
+  "version": "0.4.2",
+  "displayName": "Bastion — AI Agent Safety Guard",
+  "description": "Evaluate risky shell, Git, database and AI agent operations locally before execution.",
+  "publisher": "whistlerdigital",
+  "license": "MIT",
+  "icon": "assets/bastion-icon.png",
+  "main": "dist/extension.cjs",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": ["Other", "Linters", "Machine Learning"],
+  "keywords": ["AI agent", "security", "guardrail", "MCP", "policy"],
+  "extensionKind": ["workspace"],
+  "activationEvents": [
+    "onCommand:bastion.evaluateOperation",
+    "onCommand:bastion.initializeProject",
+    "onCommand:bastion.runDoctor"
+  ],
+  "contributes": {
+    "commands": [
+      { "command": "bastion.evaluateOperation", "title": "Evaluate Risky Operation", "category": "Bastion" },
+      { "command": "bastion.initializeProject", "title": "Initialize Project", "category": "Bastion" },
+      { "command": "bastion.runDoctor", "title": "Run Diagnostics", "category": "Bastion" }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whistlerdigital/whistler-bastion.git"
+  },
+  "homepage": "https://whistler.com.tr/open-source/bastion",
+  "bugs": { "url": "https://github.com/whistlerdigital/whistler-bastion/issues" },
+  "scripts": {
+    "build": "esbuild src/extension.js --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.cjs",
+    "package": "npm run build && vsce package"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.6.2",
+    "esbuild": "^0.25.0"
+  }
+}

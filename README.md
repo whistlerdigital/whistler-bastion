@@ -100,8 +100,19 @@ Add `--global` to `detect`, `setup`, `connect`, `doctor`, `disconnect` or `resto
 - MCP stdio server exposing `bastion_evaluate`
 - JSON stdin/stdout bridge for any language or automation platform
 - Optional JSONL audit trail and repository-level `.bastion.json`
+- VS Code-compatible extension with local risk evaluation, project initialization and diagnostics commands
 
 These open protocols let Bastion integrate with products that support MCP, subprocess hooks or Node.js packages. No project can truthfully force every AI vendor to invoke a guard automatically; the host must connect Bastion and enforce its result.
+
+## VS Code-compatible extension
+
+The extension package lives in [`vscode-extension`](vscode-extension) and uses the same local policy engine as the CLI and SDK. Open the Command Palette and run:
+
+- `Bastion: Evaluate Risky Operation`
+- `Bastion: Initialize Project`
+- `Bastion: Run Diagnostics`
+
+It is designed for Visual Studio Code and Open VSX-compatible editors. Command and workspace data stays on the local machine.
 
 ## CLI
 
